@@ -1,9 +1,13 @@
 from flask import Flask
 from flask import jsonify
-app = Flask(__name__)
+from flask_cors import CORS
 
 import networking
 
+app = Flask(__name__)
+CORS(app)
+
+# Base url for API
 BASE_URL = "/api"
 
 # Adds base url to path and returns result
