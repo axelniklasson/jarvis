@@ -1,10 +1,13 @@
 import subprocess
+import os
 
 # Uses nmap and arp to find information regarding active hosts on the network
+# NOTE: this method requires the result of the command network_scan.sh
+#       and the script must be always run at the same time as this server
 #
 # Returns dictionary with MAC address as key and IP as value
 def get_active_hosts():
-    result = subprocess.check_output(["nmap", "-sP", "192.168.0.0/24"])
+    result = open(os.getcwd() + "/network_scan_results.txt").read()
     hosts = []
     for line in result.splitlines():
         for word in line.split(" "):
@@ -28,4 +31,5 @@ def is_online(mac_address):
         return len(output.splitlines()) == 1
     except:
         return False
+
 

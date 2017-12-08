@@ -4,6 +4,7 @@ from flask_cors import CORS
 
 import networking
 
+
 app = Flask(__name__)
 CORS(app)
 
