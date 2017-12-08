@@ -5,19 +5,20 @@ import subprocess
 # Returns dictionary with MAC address as key and IP as value
 def get_active_hosts():
     result = subprocess.check_output(["nmap", "-sP", "192.168.0.0/24"])
-    hosts = {}
+    hosts = []
     for line in result.splitlines():
         for word in line.split(" "):
             # Don't add router to list, it's obviously online
             if "192" in word and word != "192.168.0.1":
                 # Get MAC address and add to host dict
                 mac_address = subprocess.check_output(["arp", word]).split(" at ")[1].split(" on ")[0]
-                hosts[mac_address] = word
+                host = { "hostname": "?", "mac_address": mac_address, "ip_address": word }
+                hosts.append(host)
     return hosts
 
 # Checks if a host with specified MAC address if online on network or not
 #
-# param: mac_address - String representation of MAC address
+# param: mac_address - string representation of MAC address
 #
 # Return true if host with MAC address can be found on the network
 def is_online(mac_address):
@@ -28,10 +29,3 @@ def is_online(mac_address):
     except:
         return False
 
-# Test suite
-hosts = get_active_hosts()
-for host in hosts:
-    if is_online(host):
-        print "Host with IP-address %s and MAC-address %s is online" % (hosts[host], host)
-    else:
-        print "Host with IP-address %s and MAC-address %s is offline" % (hosts[host], host)
