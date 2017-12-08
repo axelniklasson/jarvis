@@ -15,7 +15,8 @@ class NetworkComponent extends React.Component {
   componentDidMount() {
     axios.get(process.env.REACT_APP_API_URL + "/network/active")
       .then(res => {
-        this.setState({ hosts: res.data });
+        const hosts = res.data;
+        this.setState({ hosts });
       });
   }
 
@@ -24,13 +25,18 @@ class NetworkComponent extends React.Component {
       <div>
         <h2>Network information</h2>
         <h3>Active hosts on network</h3>
-        <List>
-          {this.state.hosts.map((host, index) => 
-            <ListItem key={index}
-              primaryText={host.hostname} secondaryText={"IP-address: " + host.ip_address + " - MAC-address: " + host.mac_address} 
-              leftIcon={<Device />} />
-          )}
-        </List>
+        {this.state.hosts.length > 0 ? (
+          <List>
+            {this.state.hosts.map((host, index) => 
+              <ListItem 
+                key={index} primaryText={host.hostname} 
+                secondaryText={"IP-address: " + host.ip_address + " - MAC-address: " + host.mac_address} 
+                leftIcon={<Device />} />
+            )}
+          </List>
+        ) : (
+          <p>Scanning network...</p>
+        )}
       </div>
     );
   }
