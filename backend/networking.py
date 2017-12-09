@@ -7,7 +7,8 @@ import os
 #
 # Returns dictionary with MAC address as key and IP as value
 def get_active_hosts():
-    result = open(os.getcwd() + "/network_scan_results.txt").read()
+    print os.getcwd()
+    result = open(os.getcwd() + "/backend/network_scan_results.txt").read()
     hosts = []
     for line in result.splitlines():
         for word in line.split(" "):

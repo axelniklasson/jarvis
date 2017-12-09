@@ -3,7 +3,7 @@ import axios from 'axios';
 import {List, ListItem} from 'material-ui/List';
 import Device from 'material-ui/svg-icons/device/devices';
 
-class NetworkComponent extends React.Component {
+export default class NetworkComponent extends React.Component {
   constructor(props) {
     super(props);
 
@@ -12,12 +12,19 @@ class NetworkComponent extends React.Component {
     };
   }
 
-  componentDidMount() {
+  fetchData() {
     axios.get(process.env.REACT_APP_API_URL + "/network/active")
       .then(res => {
         const hosts = res.data;
         this.setState({ hosts });
+
+        // Check server for new hosts every other second
+        setTimeout(() => { this.fetchData(); }, 2000);
       });
+  }
+
+  componentDidMount() {
+    this.fetchData();
   }
 
   render() {
@@ -25,6 +32,7 @@ class NetworkComponent extends React.Component {
       <div>
         <h2>Network information</h2>
         <h3>Active hosts on network</h3>
+
         {this.state.hosts.length > 0 ? (
           <List>
             {this.state.hosts.map((host, index) => 
@@ -42,4 +50,3 @@ class NetworkComponent extends React.Component {
   }
 }
 
-export default NetworkComponent;
