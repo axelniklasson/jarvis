@@ -7,3 +7,4 @@ pip-selfcheck.json
 *.pyc
 backend/network_scan_results.txt
 backend/network_scan_results_new.txt
+.DS_Store

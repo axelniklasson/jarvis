@@ -14,7 +14,8 @@ export default class NetworkComponent extends React.Component {
       snackbar: {
         text: '',
         open: false
-      }
+      },
+      polling: false
     };
 
     this.showSnackbar = this.showSnackbar.bind(this);
@@ -46,7 +47,12 @@ export default class NetworkComponent extends React.Component {
   }
 
   componentDidMount() {
+    this.myInterval = setInterval(this.fetchData.bind(this), 3000)    
     this.fetchData();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.myInterval);
   }
 
   render() {

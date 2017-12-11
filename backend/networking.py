@@ -1,6 +1,14 @@
 import subprocess
 import os
 
+# Static IP hostname mapping as fallback
+static_hostnames = {}
+static_hostnames["192.168.0.100"] = "Apple TV"
+static_hostnames["192.168.0.101"] = "Axels MacBook Pro"
+static_hostnames["192.168.0.107"] = "Sony Xperia"
+static_hostnames["192.168.0.103"] = "Axels iPhone"
+static_hostnames["192.168.0.123"] = "Raspberry Pi 2"
+
 # Uses nmap and arp to find information regarding active hosts on the network
 # NOTE: this method requires the result of the command network_scan.sh
 #       and the script must be always run at the same time as this server
@@ -18,6 +26,8 @@ def get_active_hosts():
                 arp_result = subprocess.check_output(["arp", word])
 
                 hostname = arp_result.split(" ")[0]
+                if hostname == "?" and word in static_hostnames:
+                    hostname = static_hostnames[word]
                 mac_address = arp_result.split(" at ")[1].split(" on ")[0]
 
                 if mac_address != "(incomplete)":
