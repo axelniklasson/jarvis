@@ -1,8 +1,9 @@
 import React from 'react';
 import axios from 'axios';
-import {List, ListItem} from 'material-ui/List';
+import { List, ListItem } from 'material-ui/List';
 import Device from 'material-ui/svg-icons/device/devices';
 import Snackbar from 'material-ui/Snackbar';
+import RaisedButton from 'material-ui/RaisedButton';
 
 export default class NetworkComponent extends React.Component {
   constructor(props) {
@@ -11,10 +12,14 @@ export default class NetworkComponent extends React.Component {
     this.state = {
       hosts: [],
       snackbar: {
-        text: "",
+        text: '',
         open: false
       }
     };
+
+    this.showSnackbar = this.showSnackbar.bind(this);
+    this.closeSnackbar = this.closeSnackbar.bind(this);
+    this.fetchData = this.fetchData.bind(this);
   }
 
   showSnackbar = (text) => {
@@ -31,15 +36,12 @@ export default class NetworkComponent extends React.Component {
   }
 
   fetchData() {
-    axios.get(process.env.REACT_APP_API_URL + "/network/active")
+    axios.get(process.env.REACT_APP_API_URL + '/network/active')
       .then(res => {
         const hosts = res.data;
         this.setState({ hosts });
-
-        // Check server for new hosts every other second
-        setTimeout(() => { this.fetchData(); }, 2000);
       }).catch(err => {
-        this.showSnackbar("Could not fetch hosts on network");
+        this.showSnackbar('Could not fetch hosts on network');
       });
   }
 
@@ -65,6 +67,8 @@ export default class NetworkComponent extends React.Component {
         ) : (
           <p>Scanning network...</p>
         )}
+
+        <RaisedButton label="Update" primary={true} onClick={this.fetchData} />
 
         <Snackbar
           open={this.state.snackbar.open}

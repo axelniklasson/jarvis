@@ -7,7 +7,6 @@ import os
 #
 # Returns dictionary with MAC address as key and IP as value
 def get_active_hosts():
-    print os.getcwd()
     result = open(os.getcwd() + "/backend/network_scan_results.txt").read()
     hosts = []
     for line in result.splitlines():
@@ -15,9 +14,15 @@ def get_active_hosts():
             # Don't add router to list, it's obviously online
             if "192" in word and word != "192.168.0.1":
                 # Get MAC address and add to host dict
-                mac_address = subprocess.check_output(["arp", word]).split(" at ")[1].split(" on ")[0]
-                host = { "hostname": "?", "mac_address": mac_address, "ip_address": word }
-                hosts.append(host)
+                word = word.replace("(", "").replace(")", "")
+                arp_result = subprocess.check_output(["arp", word])
+
+                hostname = arp_result.split(" ")[0]
+                mac_address = arp_result.split(" at ")[1].split(" on ")[0]
+
+                if mac_address != "(incomplete)":
+                    host = { "hostname": hostname, "mac_address": mac_address, "ip_address": word }
+                    hosts.append(host)
     return hosts
 
 # Checks if a host with specified MAC address if online on network or not
