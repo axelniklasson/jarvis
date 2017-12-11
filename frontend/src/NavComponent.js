@@ -17,7 +17,7 @@ export default class NavComponent extends React.Component {
     return (
       <div>
         <AppBar 
-          title = { "Jarvis" }
+          title = {"Jarvis"}
           onLeftIconButtonClick = { this.toggleDrawer.bind(this) }
         />
 
