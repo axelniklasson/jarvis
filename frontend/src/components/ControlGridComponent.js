@@ -22,7 +22,7 @@ const styles = {
 export default class ControlsComponent extends React.Component {
 
   handleClick = (key) => {
-    console.log('Device with key ' + key + ' was toggled.');
+    // actually toggle the socket
   }
 
   render() {

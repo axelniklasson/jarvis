@@ -14,13 +14,8 @@ export default class NetworkComponent extends React.Component {
       snackbar: {
         text: '',
         open: false
-      },
-      polling: false
+      }
     };
-
-    this.showSnackbar = this.showSnackbar.bind(this);
-    this.closeSnackbar = this.closeSnackbar.bind(this);
-    this.fetchData = this.fetchData.bind(this);
   }
 
   showSnackbar = (text) => {
@@ -36,7 +31,7 @@ export default class NetworkComponent extends React.Component {
     });
   }
 
-  fetchData() {
+  fetchData = () => {
     axios.get(process.env.REACT_APP_API_URL + '/network/active')
       .then(res => {
         const hosts = res.data;
@@ -47,12 +42,12 @@ export default class NetworkComponent extends React.Component {
   }
 
   componentDidMount() {
-    this.myInterval = setInterval(this.fetchData.bind(this), 3000)    
+    this.refreshHostsInterval = setInterval(this.fetchData, 3000);
     this.fetchData();
   }
 
   componentWillUnmount() {
-    clearInterval(this.myInterval);
+    clearInterval(this.refreshHostsInterval);
   }
 
   render() {
@@ -71,7 +66,7 @@ export default class NetworkComponent extends React.Component {
             )}
           </List>
         ) : (
-          <p>Scanning network...</p>
+          <p>Scanning network every third second...</p>
         )}
 
         <RaisedButton label="Update" primary={true} onClick={this.fetchData} />
@@ -79,7 +74,7 @@ export default class NetworkComponent extends React.Component {
         <Snackbar
           open={this.state.snackbar.open}
           message={this.state.snackbar.text}
-          autoHideDuration={4000}
+          autoHideDuration={2000}
           onRequestClose={this.closeSnackbar}
         />
 
