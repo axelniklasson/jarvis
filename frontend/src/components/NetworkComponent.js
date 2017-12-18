@@ -4,6 +4,7 @@ import { List, ListItem } from 'material-ui/List';
 import Device from 'material-ui/svg-icons/device/devices';
 import Snackbar from 'material-ui/Snackbar';
 import RaisedButton from 'material-ui/RaisedButton';
+import Refresh from 'material-ui/svg-icons/av/loop'
 
 export default class NetworkComponent extends React.Component {
   constructor(props) {
@@ -69,7 +70,7 @@ export default class NetworkComponent extends React.Component {
           <p>Scanning network every third second...</p>
         )}
 
-        <RaisedButton label="Update" primary={true} onClick={this.fetchData} />
+        <RaisedButton label="Update" primary={true} onClick={this.fetchData} icon={<Refresh />} />
 
         <Snackbar
           open={this.state.snackbar.open}
@@ -77,7 +78,6 @@ export default class NetworkComponent extends React.Component {
           autoHideDuration={2000}
           onRequestClose={this.closeSnackbar}
         />
-
       </div>
     );
   }

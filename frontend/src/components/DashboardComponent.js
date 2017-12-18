@@ -1,5 +1,6 @@
 import React from 'react';
 import SchemesComponent from './SchemesComponent';
+import AlarmComponent from './AlarmComponent';
 import ControlGridComponent from './ControlGridComponent';
 import LampImage from './images/lamp.jpg';
 import CoffeMachineImage from './images/coffemachine.png';
@@ -44,6 +45,9 @@ export default class DashboardComponent extends React.Component {
         
         <h3>Apartment scheme</h3>
         <SchemesComponent />
+
+        <h3>Alarm</h3>
+        <AlarmComponent />
 
         <h3>Controls</h3>
         <ControlGridComponent title="Lamps" elements={this.state.lamps} />
