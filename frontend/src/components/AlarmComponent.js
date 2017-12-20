@@ -11,7 +11,7 @@ export default class AlarmComponent extends React.Component {
 
     this.state = {
       alarm: {
-        status: 'unknown'
+        status: ''
       }, snackbar: {
         text: '',
         open: false
@@ -35,9 +35,17 @@ export default class AlarmComponent extends React.Component {
   fetchAlarmStatus = () => {
     axios.get(process.env.REACT_APP_API_URL + '/alarm/status')
       .then(res => {
-        const alarm = res.data.alarm;
-        this.setState({ alarm });
+        this.setState({
+          ...this.state,
+          alarm: res.data.alarm
+        });
       }).catch(err => {
+        const alarm = this.state.alarm;
+        alarm.status = "disconnected";
+        this.setState({ 
+          ...this.state,
+          alarm
+        });
         this.showSnackbar('Could not get alarm status');
       });
   }
@@ -63,7 +71,12 @@ export default class AlarmComponent extends React.Component {
   }
 
   componentDidMount() {
+    this.checkAlarmInterval = setInterval(this.fetchAlarmStatus, 5000);
     this.fetchAlarmStatus();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.checkAlarmInterval);
   }
 
   render() {

@@ -1,35 +1,32 @@
 from flask import abort
+import arduino
 import serial
 
-import logger
-
-ARDUINO = serial.Serial("/dev/cu.usbmodem1421", 9600)
-# ARDUINO = serial.Serial("/dev/ttyACM0", 9600)
-LOG_FILE = "alarm.log"
-
-def read():
-    while (ARDUINO.inWaiting() > 0):
-        logger.log(LOG_FILE, ARDUINO.readline().rstrip())
+connector = arduino.get_connector()
 
 def arm():
-    read()
-    ARDUINO.write("ALARM_ARM\n")
-    logger.log(LOG_FILE, "Alarm armed from API.")
-    return status()
+    if connector is not None:
+        connector.write("ALARM_ARM")
+        return status()
+
+    abort(500)
 
 def disarm():
-    read()
-    ARDUINO.write("ALARM_DISARM\n")
-    logger.log(LOG_FILE, "Alarm disarmed from API.")
-    return status()
+    if connector is not None:
+        connector.write("ALARM_DISARM")
+        return status()
+
+    abort(500)
 
 def status():
-    read()
-    ARDUINO.write("ALARM_STATUS\n")
-    status = ARDUINO.readline().rstrip()
-    if status == "ARMED":
-        return { "alarm": { "status": "armed" } }
-    elif status == "DISARMED":
-        return { "alarm": { "status": "disarmed" } }
-    else:
-        abort(500)
+    if connector is not None:
+        connector.write("ALARM_STATUS")
+        status = connector.read_line()
+        if status == "ARMED":
+            return { "alarm": { "status": "armed" } }
+        elif status == "DISARMED":
+            return { "alarm": { "status": "disarmed" } }
+        else:
+            abort(500) # error fallback
+    
+    return { "alarm": { "status": "disconnected" } }

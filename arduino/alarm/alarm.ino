@@ -38,9 +38,6 @@ void loop() {
       } else {
         Serial.println("DISARMED");
       }
-    } else {
-      Serial.println(input);
-      Serial.println("Command not recognized.");
     }
   }
     

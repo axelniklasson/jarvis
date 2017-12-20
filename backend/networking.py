@@ -15,6 +15,8 @@ static_hostnames["192.168.0.123"] = "Raspberry Pi 2"
 #
 # Returns dictionary with MAC address as key and IP as value
 def get_active_hosts():
+    abort(500)
+
     result = open(os.getcwd() + "/backend/network_scan_results.txt").read()
     hosts = []
     for line in result.splitlines():
