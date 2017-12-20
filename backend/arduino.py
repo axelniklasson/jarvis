@@ -3,7 +3,10 @@ import serial
 connector = None
 def get_connector(port="/dev/cu.usbmodem1421"):
     if connector is None:
-        return ArduinoConnector(port)
+        try:
+            return ArduinoConnector(port)
+        except ValueError:
+            pass
     else:
         return connector
 

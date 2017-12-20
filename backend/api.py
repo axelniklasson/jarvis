@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, redirect, make_response
+from flask import Flask, jsonify, redirect, make_response, request, abort, Response
 from flask_cors import CORS
 import networking
 import alarm
@@ -50,4 +50,24 @@ def active_hosts():
 @app.route(BASE_URL + "/tags/read")
 def read_tag():
     return jsonify(tags.read_tag())
+
+@app.route(BASE_URL + "/tags/add", methods = ["POST"])
+def add_tag():
+    tagID = request.args.get('tagid')
+    tags.add_tag(tagID)
+    return jsonify({ "success": True, "message": "Your tag is now added!" })
+
+@app.route(BASE_URL + "/tags/remove", methods = ["POST"])
+def remove():
+    tagID = request.args.get('tagid')
+    tags.remove_tag(tagID)
+    return jsonify({ "success": True, "message": "Your tag is now removed!" })
+
+@app.route(BASE_URL + "/tags/validate", methods = ["POST"])
+def validate():
+    tagID = request.args.get('tagid')
+    if tags.validate(tagID):
+        return jsonify({ "success": True })
+    else:
+        return make_response(jsonify({ "success": False, "message": "Your tag is not authorized." }), 401)
 #--- /network end --#
