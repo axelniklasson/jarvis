@@ -7,3 +7,7 @@ body {
 .main-container {
   padding: 25px;
 }
+
+.flex-container {
+  max-width: 1000px;
+}

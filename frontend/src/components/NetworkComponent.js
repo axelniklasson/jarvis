@@ -20,15 +20,22 @@ export default class NetworkComponent extends React.Component {
   }
 
   showSnackbar = (text) => {
-    const snackbar = { text: text, open: true };
-    this.setState({ snackbar });
+    this.setState({
+      ...this.state,
+      snackbar: {
+        text: text,
+        open: true
+      }
+    });
   }
 
   closeSnackbar = () => {
-    const snackbar = this.state.snackbar;
-    snackbar.open = false;
     this.setState({
-      snackbar: snackbar
+      ...this.state,
+      snackbar: {
+        text: '',
+        open: false
+      }
     });
   }
 

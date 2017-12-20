@@ -5,6 +5,14 @@ import ControlGridComponent from './ControlGridComponent';
 import LampImage from './images/lamp.jpg';
 import CoffeMachineImage from './images/coffemachine.png';
 
+const styles = {
+  top: {
+    display: "flex",
+    justifyContent: "space-between",
+    flexWrap: "wrap"
+  }
+};
+
 export default class DashboardComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -42,16 +50,24 @@ export default class DashboardComponent extends React.Component {
     return (
       <div>
         <h2>Dashboard</h2>
-        
-        <h3>Apartment scheme</h3>
-        <SchemesComponent />
 
-        <h3>Alarm</h3>
-        <AlarmComponent />
+        <div style={styles.top} className="flex-container">
+          <div>
+            <h3>Apartment scheme</h3>
+            <SchemesComponent />
+          </div>
 
-        <h3>Controls</h3>
-        <ControlGridComponent title="Lamps" elements={this.state.lamps} />
-        <ControlGridComponent title="Appliances" elements={this.state.appliances} />
+          <div>
+            <h3>Alarm</h3>
+            <AlarmComponent />
+          </div>
+        </div>
+
+        <div style={styles.top} className="flex-container">
+          <h3>Controls</h3>
+          <ControlGridComponent title="Lamps" elements={this.state.lamps} />
+          <ControlGridComponent title="Appliances" elements={this.state.appliances} />
+        </div>
       </div>
     );
   }

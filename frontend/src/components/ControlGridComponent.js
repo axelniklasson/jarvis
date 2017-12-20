@@ -2,12 +2,13 @@ import React from 'react';
 import { GridList, GridTile } from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
 import PowerSvg from 'material-ui/svg-icons/action/power-settings-new';
+import Snackbar from 'material-ui/Snackbar';
 
 const styles = {
   root: {
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'space-around',
+    width: "100%"
   },
   gridList: {
     display: 'flex',
@@ -16,18 +17,44 @@ const styles = {
   },
   titleStyle: {
     color: 'rgb(0, 188, 212)',
-  },
+  }
 };
 
-export default class ControlsComponent extends React.Component {
+export default class ControlGridComponent extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      snackbar: {
+        text: '',
+        open: false
+      }
+    };
+  }
 
   handleClick = (key) => {
-    // actually toggle the socket
+    this.setState({
+      ...this.state,
+      snackbar: {
+        text: "Toggled [" + key + "]",
+        open: true
+      }
+    });
+  }
+
+  closeSnackbar = () => {
+    this.setState({
+      ...this.state,
+      snackbar: {
+        text: '',
+        open: false
+      }
+    });
   }
 
   render() {
     return (
-      <div>
+      <div style={{width: "100%"}}>
         <h4>{this.props.title}</h4>
         <div style={styles.root}>
           <GridList style={styles.gridList} cols={2.2}>
@@ -43,6 +70,13 @@ export default class ControlsComponent extends React.Component {
           ))}
           </GridList>
         </div>
+
+        <Snackbar
+          open={this.state.snackbar.open}
+          message={this.state.snackbar.text}
+          autoHideDuration={2000}
+          onRequestClose={this.closeSnackbar}
+        />
       </div>
     );
   }
