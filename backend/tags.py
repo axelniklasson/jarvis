@@ -33,3 +33,11 @@ def validate(tagID):
     except IOError:
         return False
 
+def list():
+    try:
+        tags = [{"tagID": x.rstrip(), "user": "John Doe"} for x in open("tags.txt", "r").readlines()]
+    except IOError:
+        tags = []
+
+    return {"tags": tags}
+

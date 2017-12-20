@@ -70,4 +70,8 @@ def validate():
         return jsonify({ "success": True })
     else:
         return make_response(jsonify({ "success": False, "message": "Your tag is not authorized." }), 401)
+
+@app.route(BASE_URL + "/tags/list")
+def list_tags():
+    return jsonify(tags.list())
 #--- /network end --#
