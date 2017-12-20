@@ -2,6 +2,7 @@ from flask import Flask, jsonify, redirect, make_response
 from flask_cors import CORS
 import networking
 import alarm
+import tags
 
 app = Flask(__name__)
 CORS(app)
@@ -45,3 +46,8 @@ def active_hosts():
     return jsonify(hosts)
 #--- /network end --#
 
+#--- /tags start --#
+@app.route(BASE_URL + "/tags/read")
+def read_tag():
+    return jsonify(tags.read_tag())
+#--- /network end --#

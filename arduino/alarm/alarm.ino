@@ -12,6 +12,8 @@ MFRC522::MIFARE_Key key;
 int greenLEDPin = 7;
 int redLEDPin = 8;
 boolean locked = true;
+boolean reading = false;
+boolean blinking = false;
 String tags[5]= "24:60:E5:DB";
 
 void setup() {
@@ -24,6 +26,21 @@ void setup() {
 }
 
 void loop() {
+
+  if (reading) {
+    if (!rfid.PICC_IsNewCardPresent() || !rfid.PICC_ReadCardSerial()) {
+      blinking = !blinking;
+      blink();
+      return;
+    }
+
+    String tagID = getTagID();
+    Serial.println(tagID);
+    reading = false;
+    turnLedsOFF();
+    delay(2000);
+  }
+  
   updateLeds();
 
   if (Serial.available()) {
@@ -38,41 +55,29 @@ void loop() {
       } else {
         Serial.println("DISARMED");
       }
+    } else if (input.equals("READ_TAG")) {
+        reading = true;
+        return;
+    } else if (input.equals("ADD_TAG")) {
+        
     }
   }
     
   if (!rfid.PICC_IsNewCardPresent() || !rfid.PICC_ReadCardSerial())
     return;
 
-  // Serial.print(F("PICC type: "));
   MFRC522::PICC_Type piccType = rfid.PICC_GetType(rfid.uid.sak);
-  // Serial.println(rfid.PICC_GetTypeName(piccType));
 
-  // Check is the PICC of Classic MIFARE type
-  if (piccType != MFRC522::PICC_TYPE_MIFARE_MINI &&
-    piccType != MFRC522::PICC_TYPE_MIFARE_1K &&
-    piccType != MFRC522::PICC_TYPE_MIFARE_4K) {
-    Serial.println(F("Tag is not of type MIFARE Classic."));
-    return;
-  }
 
-  String strID = "";
-  for (byte i = 0; i < 4; i++) {
-    strID +=
-    (rfid.uid.uidByte[i] < 0x10 ? "0" : "") +
-    String(rfid.uid.uidByte[i], HEX) +
-    (i!=3 ? ":" : "");
-  }
-  strID.toUpperCase();
-
+  String tagID = getTagID();
   boolean match = false;
   for (int i = 0; i < sizeof(tags); i++) {
-    if (strID.equals(tags[i])) {
+    if (tagID.equals(tags[i])) {
       match = true;
       if (locked) {
-        Serial.println("Alarm disarmed using tag " + strID + ".");
+        Serial.println("Alarm disarmed using tag " + tagID + ".");
       } else {
-        Serial.println("Alarm armed using tag " + strID + ".");
+        Serial.println("Alarm armed using tag " + tagID + ".");
       }
 
       locked = !locked;
@@ -82,11 +87,23 @@ void loop() {
   }
 
   if (!match) {
-    Serial.println("Tag " + strID + " is not recognized.");    
+    Serial.println("Tag " + tagID + " is not recognized.");    
   }
   
   rfid.PICC_HaltA();
   rfid.PCD_StopCrypto1();
+}
+
+String getTagID() {
+  String tagID = "";
+  for (byte i = 0; i < 4; i++) {
+    tagID +=
+    (rfid.uid.uidByte[i] < 0x10 ? "0" : "") +
+    String(rfid.uid.uidByte[i], HEX) +
+    (i!=3 ? ":" : "");
+  }
+  tagID.toUpperCase();
+  return tagID;
 }
 
 void updateLeds() {
@@ -99,3 +116,18 @@ void updateLeds() {
   }
 }
 
+void blink() {
+  if (blinking) {
+    digitalWrite(redLEDPin, HIGH);
+    digitalWrite(greenLEDPin, LOW);  
+  } else {
+    digitalWrite(redLEDPin, LOW);
+    digitalWrite(greenLEDPin, HIGH);  
+  }
+  delay(100);
+}
+
+void turnLedsOFF() {
+  digitalWrite(redLEDPin, LOW);
+  digitalWrite(greenLEDPin, LOW);  
+}
