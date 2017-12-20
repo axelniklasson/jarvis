@@ -54,7 +54,8 @@ def read_tag():
 @app.route(BASE_URL + "/tags/add", methods = ["POST"])
 def add_tag():
     tagID = request.args.get('tagid')
-    tags.add_tag(tagID)
+    name = request.args.get('name')
+    tags.add_tag(tagID, name)
     return jsonify({ "success": True, "message": "Your tag is now added!" })
 
 @app.route(BASE_URL + "/tags/remove", methods = ["POST"])

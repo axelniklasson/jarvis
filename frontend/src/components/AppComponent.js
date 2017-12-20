@@ -1,10 +1,10 @@
 import React from 'react';
+import { Route } from 'react-router-dom';
 import NavComponent from './NavComponent'
 import DashboardComponent from './DashboardComponent';
 import DevicesComponent from './DevicesComponent';
-import NetworkComponent from './NetworkComponent';
 import SettingsComponent from './SettingsComponent';
-import { Route } from 'react-router-dom';
+import UsersComponent from './UsersComponent';
 
 const AppComponent = () => (
   <div>
@@ -13,7 +13,7 @@ const AppComponent = () => (
     <div className="main-container">
       <Route exact path="/" component={ DashboardComponent }/>
       <Route path="/devices" component={ DevicesComponent }/>
-      <Route path="/network" component={ NetworkComponent }/>
+      <Route path="/users" component={ UsersComponent } />
       <Route path="/settings" component={ SettingsComponent }/>
     </div>
   </div>

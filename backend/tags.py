@@ -8,22 +8,22 @@ def read_tag():
         tagID = connector.read_line()
         return { "tagID": tagID }
 
-def add_tag(tagID):
+def add_tag(tagID, name):
     try:
-        tags = [x.rstrip() for x in open("tags.txt", "r").readlines()]
+        tagIDs = [x.rstrip().split(",")[0] for x in open("tags.txt", "r").readlines()]
     except IOError:
-        tags = []
+        tagIDs = []
 
-    if tagID not in tags:
+    if tagID not in tagIDs:
         with open("tags.txt", "a+") as tags:
-            tags.write(tagID + "\n")
+            tags.write(tagID + "," + name + "\n")
 
 def remove_tag(tagID):
     tags = [x.rstrip() for x in open("tags.txt", "r").readlines()]
     
     with open("tags.txt", "w") as f:
         for tag in tags:
-            if tagID != tag:
+            if tagID != tag.split(",")[0]:
                 f.write(tag + "\n")
 
 def validate(tagID):
@@ -35,7 +35,7 @@ def validate(tagID):
 
 def list():
     try:
-        tags = [{"tagID": x.rstrip(), "user": "John Doe"} for x in open("tags.txt", "r").readlines()]
+        tags = [{"tagID": x.rstrip().split(",")[0], "user": x.rstrip().split(",")[1]} for x in open("tags.txt", "r").readlines()]
     except IOError:
         tags = []
 

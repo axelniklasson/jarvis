@@ -35,8 +35,8 @@ export default class NavComponent extends React.Component {
             <MenuItem onClick={ this.closeDrawer}>Devices</MenuItem>
           </Link>
 
-          <Link to="/network" style={{ textDecoration: "none" }}>
-            <MenuItem onClick={ this.closeDrawer}>Network</MenuItem>
+          <Link to="/users" style={{ textDecoration: "none" }}>
+            <MenuItem onClick={ this.closeDrawer}>Users</MenuItem>
           </Link>
 
           <Link to="/settings" style={{ textDecoration: "none" }}>
