@@ -6,7 +6,7 @@ def read_tag():
     if connector is not None:
         connector.write("READ_TAG")
         tagID = connector.read_line()
-        return { "tagID": tagID }
+        return tagID
 
 def add_tag(tagID, name):
     try:
@@ -41,3 +41,6 @@ def list():
 
     return {"tags": tags}
 
+def stop_read():
+    if connector is not None:
+        connector.write("STOP_READ")

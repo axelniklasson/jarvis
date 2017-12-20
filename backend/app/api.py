@@ -49,7 +49,11 @@ def active_hosts():
 #--- /tags start --#
 @app.route(BASE_URL + "/tags/read")
 def read_tag():
-    return jsonify(tags.read_tag())
+    res = tags.read_tag()
+    if res == "TIMEOUT":
+        return make_response(jsonify({ "success": False, "message": "Timeout. Be faster." }), 408)
+    else:
+        return jsonify({ "tagID": res })
 
 @app.route(BASE_URL + "/tags/add", methods = ["POST"])
 def add_tag():
@@ -71,6 +75,13 @@ def validate():
         return jsonify({ "success": True })
     else:
         return make_response(jsonify({ "success": False, "message": "Your tag is not authorized." }), 401)
+
+@app.route(BASE_URL + "/tags/stopread", methods = ["POST"])
+def stop_read():
+    if tags.stop_read():
+        return jsonify({ "success": True })
+    else:
+        return make_response(jsonify({ "success": False, "message": "Could not stop read." }), 500)
 
 @app.route(BASE_URL + "/tags/list")
 def list_tags():

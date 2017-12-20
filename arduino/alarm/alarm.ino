@@ -14,6 +14,7 @@ int redLEDPin = 8;
 boolean locked = true;
 boolean reading = false;
 boolean blinking = false;
+unsigned long readStart;
 String tags[5]= "24:60:E5:DB";
 
 void setup() {
@@ -29,6 +30,11 @@ void loop() {
 
   if (reading) {
     if (!rfid.PICC_IsNewCardPresent() || !rfid.PICC_ReadCardSerial()) {
+      if (millis() - readStart >= 5000) {
+        reading = false;
+        Serial.println("TIMEOUT");
+        return;  
+      }
       blinking = !blinking;
       blink();
       return;
@@ -57,6 +63,7 @@ void loop() {
       }
     } else if (input.equals("READ_TAG")) {
         reading = true;
+        readStart = millis();
         return;
     } else if (input.equals("ADD_TAG")) {
         
