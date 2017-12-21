@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { List, ListItem } from 'material-ui/List';
 import Device from 'material-ui/svg-icons/device/devices';
-import Snackbar from 'material-ui/Snackbar';
+import SnackBar from './helpers/SnackBar'
 import RaisedButton from 'material-ui/RaisedButton';
 import Refresh from 'material-ui/svg-icons/av/loop'
 
@@ -13,28 +13,17 @@ export default class NetworkComponent extends React.Component {
     this.state = {
       hosts: [],
       snackbar: {
-        text: '',
+        message: '',
         open: false
       }
     };
   }
 
-  showSnackbar = (text) => {
+  showSnackbar = (message) => {
     this.setState({
-      ...this.state,
       snackbar: {
-        text: text,
+        message: message,
         open: true
-      }
-    });
-  }
-
-  closeSnackbar = () => {
-    this.setState({
-      ...this.state,
-      snackbar: {
-        text: '',
-        open: false
       }
     });
   }
@@ -79,11 +68,8 @@ export default class NetworkComponent extends React.Component {
 
         <RaisedButton label="Update" primary={true} onClick={this.fetchData} icon={<Refresh />} />
 
-        <Snackbar
-          open={this.state.snackbar.open}
-          message={this.state.snackbar.text}
-          autoHideDuration={2000}
-          onRequestClose={this.closeSnackbar}
+        <SnackBar 
+          data={this.state.snackbar}
         />
       </div>
     );

@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import Snackbar from 'material-ui/Snackbar';
 import {List, ListItem} from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import Tag from 'material-ui/svg-icons/hardware/security';
@@ -8,6 +7,7 @@ import Remove from 'material-ui/svg-icons/content/remove-circle';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import AddUserDialog from './users/AddUserDialog';
+import SnackBar from './helpers/SnackBar'
 
 export default class UsersComponent extends React.Component {
   constructor(props) {
@@ -16,16 +16,12 @@ export default class UsersComponent extends React.Component {
     this.state = {
       tags: [],
       snackbar: {
-        text: '',
+        message: '',
         open: false
       },
       modal: {
         open: false,
         tag: {}
-      },
-      addModal: {
-        open: false,
-        user: {}
       }
     };
   }
@@ -34,22 +30,11 @@ export default class UsersComponent extends React.Component {
     this.fetchTags(); 
   }
 
-  showSnackbar = (text) => {
+  showSnackbar = (message) => {
     this.setState({
-      ...this.state,
       snackbar: {
-        text: text,
+        message: message,
         open: true
-      }
-    });
-  }
-
-  closeSnackbar = () => {
-    this.setState({
-      ...this.state,
-      snackbar: {
-        text: '',
-        open: false
       }
     });
   }
@@ -159,13 +144,12 @@ export default class UsersComponent extends React.Component {
           The user {this.state.modal.tag.user} will not be able to arm/disarm the alarm system among other things. This cannot be undone.
         </Dialog>
 
-        <AddUserDialog onSubmit={this.addUser} />
+        <AddUserDialog 
+          onSubmit={this.addUser}
+        />
 
-        <Snackbar
-          open={this.state.snackbar.open}
-          message={this.state.snackbar.text}
-          autoHideDuration={2000}
-          onRequestClose={this.closeSnackbar}
+        <SnackBar 
+          data={this.state.snackbar}
         />
       </div>
     );

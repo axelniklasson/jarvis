@@ -44,7 +44,6 @@ export default class AddUserDialog extends React.Component {
         clearInterval(this.interval);
       }).catch(err => {
         clearInterval(this.interval);
-        this.readTag();
       });
   }
 

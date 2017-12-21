@@ -2,7 +2,7 @@ import React from 'react';
 import { GridList, GridTile } from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
 import PowerSvg from 'material-ui/svg-icons/action/power-settings-new';
-import Snackbar from 'material-ui/Snackbar';
+import SnackBar from './helpers/SnackBar'
 
 const styles = {
   root: {
@@ -26,30 +26,23 @@ export default class ControlGridComponent extends React.Component {
 
     this.state = {
       snackbar: {
-        text: '',
+        message: '',
         open: false
       }
     };
   }
 
-  handleClick = (key) => {
+  showSnackbar = (message) => {
     this.setState({
-      ...this.state,
       snackbar: {
-        text: "Toggled [" + key + "]",
+        message: message,
         open: true
       }
     });
   }
 
-  closeSnackbar = () => {
-    this.setState({
-      ...this.state,
-      snackbar: {
-        text: '',
-        open: false
-      }
-    });
+  handleClick = (key) => {
+    this.showSnackbar("Toggled [" + key + "]");
   }
 
   render() {
@@ -71,11 +64,8 @@ export default class ControlGridComponent extends React.Component {
           </GridList>
         </div>
 
-        <Snackbar
-          open={this.state.snackbar.open}
-          message={this.state.snackbar.text}
-          autoHideDuration={2000}
-          onRequestClose={this.closeSnackbar}
+        <SnackBar
+          data={this.state.snackbar}
         />
       </div>
     );

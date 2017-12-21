@@ -3,7 +3,7 @@ import axios from 'axios';
 import RaisedButton from 'material-ui/RaisedButton';
 import Lock from 'material-ui/svg-icons/action/lock';
 import LockOpen from 'material-ui/svg-icons/action/lock-open';
-import Snackbar from 'material-ui/Snackbar';
+import SnackBar from './helpers/SnackBar'
 
 export default class AlarmComponent extends React.Component {
   constructor(props) {
@@ -12,40 +12,31 @@ export default class AlarmComponent extends React.Component {
     this.state = {
       alarm: {
         status: ''
-      }, snackbar: {
-        text: '',
+      },
+      snackbar: {
+        message: '',
         open: false
       }
     };
   }
 
-  showSnackbar = (text) => {
-    const snackbar = { text: text, open: true };
-    this.setState({ snackbar });
-  }
-
-  closeSnackbar = () => {
-    const snackbar = this.state.snackbar;
-    snackbar.open = false;
+  showSnackbar = (message) => {
     this.setState({
-      snackbar: snackbar
+      snackbar: {
+        message: message,
+        open: true
+      }
     });
   }
 
   fetchAlarmStatus = () => {
     axios.get(process.env.REACT_APP_API_URL + '/alarm/status')
       .then(res => {
-        this.setState({
-          ...this.state,
-          alarm: res.data.alarm
-        });
+        this.setState({ alarm: res.data.alarm });
       }).catch(err => {
         const alarm = this.state.alarm;
         alarm.status = "disconnected";
-        this.setState({ 
-          ...this.state,
-          alarm
-        });
+        this.setState({ alarm });
         this.showSnackbar('Could not get alarm status');
       });
   }
@@ -94,11 +85,8 @@ export default class AlarmComponent extends React.Component {
           <RaisedButton label="Arm" primary={true} onClick={this.armAlarm} icon={<Lock />} />
         ) }
 
-        <Snackbar
-          open={this.state.snackbar.open}
-          message={this.state.snackbar.text}
-          autoHideDuration={2000}
-          onRequestClose={this.closeSnackbar}
+        <SnackBar 
+          data={this.state.snackbar}
         />
       </div>
     )

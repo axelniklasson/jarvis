@@ -22,15 +22,17 @@ FLASK_APP=app/api.py flask run
 and the server can be found on ```http://localhost:5000/api```.
 
 ### Frontend
+The frontend uses [yarn](https://yarnpkg.com/lang/en/) to handle dependencies and running/building.
+
 ```
 cd frontend
-npm install
-npm start
+yarn
+yarn start
 ```
 
 The development server can be found at ```http://localhost:3000/```
 
 To build for production, run
 ```
-npm run build
+yarn build
 ```
